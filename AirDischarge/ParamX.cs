@@ -8,9 +8,9 @@ namespace AirDischarge
 
         public double CurrentX(double currentP, double pressureInTail)
         {
-		        _currentX = pressureInTail / currentP;
+            _currentX = pressureInTail / currentP;
 
-				return Math.Round(_currentX, 4);
+            return Math.Round(_currentX, 4);
         }
     }
 }
