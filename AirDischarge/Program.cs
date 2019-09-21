@@ -35,7 +35,7 @@ namespace AirDischarge
 
             //var dt = 0.01d; //В секундах
 
-            if ((vesselOne.CurrentPressure - vesselTwo.CurrentPressure) > 0.001E5)
+            if (vesselOne.CurrentPressure - vesselTwo.CurrentPressure > 0.001E5)
             {
                 var rk6 = rungeKutta.Rk6(0, dt, vesselOne.CurrentPressure, diffEquation);
                 if (!double.IsNaN(rk6))
@@ -51,7 +51,7 @@ namespace AirDischarge
         private IContainer CompositionRoot()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<PneumaticParams>().SingleInstance();
+            builder.RegisterInstance(PneumaticParams.GetFromConfig).SingleInstance();
             builder.RegisterType<ConstantParams>().SingleInstance();
             builder.RegisterType<ParamFi>().SingleInstance();
             builder.RegisterType<DichotomyDensity>().SingleInstance();
