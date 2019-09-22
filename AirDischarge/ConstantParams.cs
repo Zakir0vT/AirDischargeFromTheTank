@@ -6,14 +6,14 @@ namespace AirDischarge
     {
         private readonly PneumaticParams _pneumaticParams;
         private double _molarMassOfTheMixture;
-		private double _criticalPressure;
+        private double _criticalPressure;
         private double _criticalTemperature;
         public double GasConstantOfTheMixture { get; set; }
-		public double A { get; set; }
+        public double A { get; set; }
         public double B { get; set; }
-		public double Xcr { get; set; }
+        public double Xcr { get; set; }
 
-		public ConstantParams(PneumaticParams pneumaticParams)
+        public ConstantParams(PneumaticParams pneumaticParams)
         {
             _pneumaticParams = pneumaticParams;
         }

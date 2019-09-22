@@ -7,21 +7,15 @@ namespace AirDischarge
     {
         static void Main(string[] args)
         {
-            var program = new Program();
             var startPressure = 4E5;
             var endPressure = 1E5;
-            double time = 0;
-            while (time < 20)
-            {
-                Console.WriteLine("PressureHead " + Math.Round(startPressure / 1E5, 4) + " Time    " + Math.Round(time, 2));
-                startPressure = program.Calculation(startPressure, endPressure, 0.1);
-                time += 0.1;
-            }
+            var dt = 0.1d; //in seconds
+            new Program().Calculation(startPressure, endPressure, dt);
 
             Console.ReadKey();
         }
 
-        private double Calculation(double head, double tail, double dt)
+        private void Calculation(double head, double tail, double dt)
         {
             var container = CompositionRoot();
             container.Resolve<ConstantParams>().Calculate();
@@ -33,25 +27,26 @@ namespace AirDischarge
             vesselOne.CurrentPressure = head;
             vesselTwo.CurrentPressure = tail;
 
-            //var dt = 0.01d; //В секундах
+            var time = 0d;
 
-            if ((vesselOne.CurrentPressure - vesselTwo.CurrentPressure) > 0.001E5)
+            while (vesselOne.CurrentPressure - vesselTwo.CurrentPressure > 0.001E5)
             {
+                Console.WriteLine("PressureHead " + Math.Round(vesselOne.CurrentPressure / 1E5, 4) + " Time    " + Math.Round(time, 2));
+
                 var rk6 = rungeKutta.Rk6(0, dt, vesselOne.CurrentPressure, diffEquation);
                 if (!double.IsNaN(rk6))
                 {
                     var deltaP = vesselOne.CurrentPressure - rk6;
                     vesselOne.CurrentPressure -= deltaP;
+                    time += dt;
                 }
             }
-
-            return vesselOne.CurrentPressure;
         }
 
         private IContainer CompositionRoot()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<PneumaticParams>().SingleInstance();
+            builder.RegisterInstance(PneumaticParams.GetFromConfig).SingleInstance();
             builder.RegisterType<ConstantParams>().SingleInstance();
             builder.RegisterType<ParamFi>().SingleInstance();
             builder.RegisterType<DichotomyDensity>().SingleInstance();
