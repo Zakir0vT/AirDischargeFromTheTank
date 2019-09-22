@@ -24,7 +24,7 @@ namespace AirDischarge
                 {
                     var pneumaticParams = new PneumaticParams();
                     serializer.Formatting = Formatting.Indented;
-                    serializer.Serialize(sw,  pneumaticParams);
+                    serializer.Serialize(sw, pneumaticParams);
                     return pneumaticParams;
                 }
             }
